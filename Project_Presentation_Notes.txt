@@ -1,0 +1,68 @@
+Apollo Chat - Project & Code Walkthrough
+========================================
+
+**Project Overview:**
+---------------------
+Apollo Chat is a real-time, end-to-end encrypted chat application built with React (frontend) and Node.js/Express/Socket.IO (backend). The goal is to demonstrate the flow of secure messaging, including message encryption (simulated for demo), real-time delivery, and a user-friendly interface.
+
+**How End-to-End Encryption is Simulated:**
+-------------------------------------------
+- In a real-world app, messages would be encrypted with AES and the AES key would be encrypted with RSA.
+- For this demo, we simulate encryption by:
+  - Storing the real message as `plainText`.
+  - Storing an unreadable version (Base64-encoded) as `content`.
+  - No real cryptography is used for the demo toggle, but the code structure allows for easy upgrade to real encryption.
+
+**How Messages are Sent and Received in Real Time:**
+----------------------------------------------------
+- The frontend uses Socket.IO to connect to the backend.
+- When a user sends a message, it is emitted to the backend via the `send_message` event.
+- The backend receives the message and broadcasts it to all users in the chat room using the `receive_message` event.
+- Both sender and recipient see the message appear instantly in their chat windows.
+
+**Frontend-Backend Communication:**
+-----------------------------------
+- The frontend emits `join_room` to join a chat room (based on user IDs).
+- The frontend emits `send_message` with the message object (including `content`, `plainText`, and `timestamp`).
+- The backend listens for `send_message` and emits `receive_message` to all clients in the room.
+- The frontend listens for `receive_message` and updates the chat UI.
+
+**How the Message Toggle Works:**
+---------------------------------
+- Each message bubble can be clicked.
+- On click, the message toggles between showing the unreadable string (`content`) and the real message (`plainText`).
+- This simulates the process of decrypting a message for demonstration purposes.
+
+**Key Files and Their Responsibilities:**
+-----------------------------------------
+- `frontend/src/components/MessageInput.tsx`: Handles composing and sending messages. For the demo, it sends both `plainText` and `content`.
+- `frontend/src/components/Message.tsx`: Displays each message and toggles between encrypted/plain text on click.
+- `frontend/src/pages/ChatRoom.tsx`: Main chat logic. Handles socket connection, message state, and rendering the chat UI.
+- `backend/src/index.js`: Sets up the Express server, Socket.IO, and handles real-time message broadcasting.
+
+**Demo-Specific Logic/Simplifications:**
+----------------------------------------
+- No real encryption/decryption is performed; only Base64 encoding is used for the unreadable string.
+- Messages are not saved to the database for the demo; only live messages are shown.
+- The backend simply rebroadcasts the message to all clients in the room.
+- The code is structured so that real encryption could be added later with minimal changes.
+
+**How to Run and Test the Project:**
+------------------------------------
+1. Start the backend server (`npm start` or `node src/index.js` in the backend folder).
+2. Start the frontend (`npm run dev` in the frontend folder).
+3. Open two browser windows, log in as different users, and navigate to the same chat room.
+4. Type and send messages. Messages will appear in real time on both ends.
+5. Click any message bubble to toggle between the unreadable string and the real message.
+
+**Extra Notes for Presentation:**
+---------------------------------
+- The project demonstrates the flow of secure messaging, even though the encryption is simulated.
+- The toggle feature helps visualize what is stored/transmitted (unreadable) vs. what the user sees (decrypted).
+- The architecture is modular and ready for real cryptography if needed.
+- Real-time updates are handled efficiently with Socket.IO.
+- The UI is modern, responsive, and user-friendly.
+
+**Summary:**
+------------
+Apollo Chat is a great demonstration of real-time, end-to-end encrypted chat principles, with a clear codebase and demo logic that is easy to present and extend. 
